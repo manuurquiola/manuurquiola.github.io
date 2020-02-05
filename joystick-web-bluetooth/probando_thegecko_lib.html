@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>micro:bit</title>
+        <script type="text/javascript" src="./microbit.umd.js"></script>
+    </head>
+    <body>
+        <button id="find">find</button>
+		<button id="U">^</button>
+		<button id="D">v</button>
+		<button id="L"><</button>
+		<button id="R">></button>
+        <div id="log" style="white-space: pre" />
+        <script>		
+            const logEl = document.getElementById("log");
+            const UP = document.getElementById("U");
+            const DOWN= document.getElementById("D");
+            const RIGHT = document.getElementById("R");
+            const LEFT = document.getElementById("L");
+            const log = (message) => logEl.innerHTML = `${message}\n${logEl.innerHTML}`;
+            const logJson = (message) => log(JSON.stringify(message, null, 2));
+            const eventHandler = event => log(`${event.type}: ${JSON.stringify(event.detail, null, 2)}`);
+	
+					
+			
+            document.getElementById("find").onclick = async () => {
+                const device = await microbit.requestMicrobit(window.navigator.bluetooth);
+                if (device) {
+                    const services = await microbit.getServices(device);
+
+                    if (services.deviceInformationService) {
+                        logJson(await services.deviceInformationService.readDeviceInformation());
+                    }
+
+                    if (services.uartService) {
+                        services.uartService.addEventListener("receiveText", eventHandler);
+                        LEFT.addEventListener("click", function onEvent(event) {
+						services.uartService.sendText("l\n");
+						});
+						RIGHT.addEventListener("click", function onEvent(event){
+						services.uartService.sendText("r\n");
+						});
+						DOWN.addEventListener("click", function onEvent(event) {
+						services.uartService.sendText("d\n");
+						});
+						UP.addEventListener("click", function onEvent(event){
+						services.uartService.sendText("u\n");
+						});
+						document.addEventListener('keydown', function keyDownHandler(event){
+							if (event.key === "ArrowUp") {
+							services.uartService.sendText("f\n");
+							}
+							else if (event.key === "ArrowDown") {
+							services.uartService.sendText("b\n");
+							}
+							else if (event.key === "ArrowLeft") {
+							services.uartService.sendText("l\n");
+							}
+							else if (event.key === "ArrowRight") {
+							services.uartService.sendText("r\n");
+							}
+							}, false);
+						document.addEventListener('keyup',function keyUpHandler (event) {
+							services.uartService.sendText("s\n");
+							} , false);
+					};
+                }
+
+					
+					
+            }
+			
+			
+			
+			
+            
+        </script>
+    </body>
+</html>
