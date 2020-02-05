@@ -40,10 +40,10 @@
 						services.uartService.sendText("r\n");
 						});
 						DOWN.addEventListener("click", function onEvent(event) {
-						services.uartService.sendText("d\n");
+						services.uartService.sendText("b\n");
 						});
 						UP.addEventListener("click", function onEvent(event){
-						services.uartService.sendText("u\n");
+						services.uartService.sendText("f\n");
 						});
 						document.addEventListener('keydown', function keyDownHandler(event){
 							if (event.key === "ArrowUp") {
