@@ -67,13 +67,13 @@
 						services.uartService.sendText("f\n");
 						});
 						HORN.addEventListener("click", function onEvent(event){
-						services.uartService.sendText("b\n");
+						services.uartService.sendText("h\n");
 						});
 						SENDCOL.addEventListener("click", function onEvent(event){
 						numRed= document.getElementById("Color").value.substring(1,3);
 						numGreen= document.getElementById("Color").value.substring(3,5);
 						numBlue= document.getElementById("Color").value.substring(5,7);
-						services.uartService.sendText("c", tres_carac(parseInt(numRed, 16)), tres_carac(parseInt(numGreen, 16)), tres_carac(parseInt(numBlue, 16)),"\n");//NUMEROS A ENVIAR  siempre de 3 caracteres para cortar facil el string en makeCode
+						services.uartService.sendText("c".concat(tres_carac(parseInt(numRed, 16)).concat(tres_carac(parseInt(numGreen, 16)).concat(tres_carac(parseInt(numBlue, 16)).concat("\n")))));//NUMEROS A ENVIAR  siempre de 3 caracteres para cortar facil el string en makeCode
 						});
 						document.addEventListener('keydown', function keyDownHandler(event){
 							if (event.key === "ArrowUp") {
@@ -87,6 +87,9 @@
 							}
 							else if (event.key === "ArrowRight") {
 							services.uartService.sendText("r\n");
+							}
+							else if (event.key === "Enter") {
+							services.uartService.sendText("h\n");
 							}
 							}, false);
 						document.addEventListener('keyup',function keyUpHandler (event) {
