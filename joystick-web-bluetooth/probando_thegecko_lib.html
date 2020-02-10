@@ -9,18 +9,39 @@
 		<button id="D">v</button>
 		<button id="L"><</button>
 		<button id="R">></button>
-        <div id="log" style="white-space: pre" />
+		<button id="Bocina">Bocina</button>
+		Color de las luces: <input type="color" id="Color">
+		<button id="cambiarColor">Enviar color</button>
+		<div id="log" style="white-space: pre" />
+		
         <script>		
             const logEl = document.getElementById("log");
             const UP = document.getElementById("U");
             const DOWN= document.getElementById("D");
             const RIGHT = document.getElementById("R");
             const LEFT = document.getElementById("L");
+			const HORN = document.getElementById("Bocina");
+			const SENDCOL = document.getElementById("cambiarColor");
+			const RED = document.getElementById("Rojo");
+			const GREEN = document.getElementById("Verde");
+			const BLUE = document.getElementById("Azul");
             const log = (message) => logEl.innerHTML = `${message}\n${logEl.innerHTML}`;
             const logJson = (message) => log(JSON.stringify(message, null, 2));
             const eventHandler = event => log(`${event.type}: ${JSON.stringify(event.detail, null, 2)}`);
-	
-					
+			
+			function tres_carac(num){
+				num=num.toString();
+				if (num.length===1) {
+					prefijo="00";
+					num=prefijo.concat(num);
+				}
+				if (num.length===2) {
+					prefijo="0";
+					num=prefijo.concat(num);
+				}
+				return num;
+			}
+				
 			
             document.getElementById("find").onclick = async () => {
                 const device = await microbit.requestMicrobit(window.navigator.bluetooth);
@@ -44,6 +65,15 @@
 						});
 						UP.addEventListener("click", function onEvent(event){
 						services.uartService.sendText("f\n");
+						});
+						HORN.addEventListener("click", function onEvent(event){
+						services.uartService.sendText("b\n");
+						});
+						SENDCOL.addEventListener("click", function onEvent(event){
+						numRed= document.getElementById("Color").value.substring(1,3);
+						numGreen= document.getElementById("Color").value.substring(3,5);
+						numBlue= document.getElementById("Color").value.substring(5,7);
+						services.uartService.sendText("c", tres_carac(parseInt(numRed, 16)), tres_carac(parseInt(numGreen, 16)), tres_carac(parseInt(numBlue, 16)),"\n");//NUMEROS A ENVIAR  siempre de 3 caracteres para cortar facil el string en makeCode
 						});
 						document.addEventListener('keydown', function keyDownHandler(event){
 							if (event.key === "ArrowUp") {
