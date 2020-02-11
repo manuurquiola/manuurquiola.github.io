@@ -91,6 +91,12 @@
 							else if (event.key === "Enter") {
 							services.uartService.sendText("h\n");
 							}
+							else if (event.key === "a") {
+							services.uartService.sendText("a\n");
+							}
+							else if (event.key === "d") {
+							services.uartService.sendText("d\n");
+							}
 							}, false);
 						document.addEventListener('keyup',function keyUpHandler (event) {
 							services.uartService.sendText("s\n");
